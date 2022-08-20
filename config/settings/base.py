@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 import sys
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,6 +29,8 @@ SECRET_KEY = "django-insecure-q$f1&6=o_xpo7w)qx%+j+=w-ip@e#%*)#z2+pyl0wudee4v36^
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+AUTH_USER_MODEL = "users.User"
 
 # Application definition
 
@@ -54,6 +57,7 @@ THIRD_PARTY = [
 
 LOCAL_APPS = [
     'users',
+    'posts',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY + LOCAL_APPS
@@ -82,6 +86,9 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            'libraries': {
+                'staticfiles': 'django.templatetags.static',
+            }
         },
     },
 ]
@@ -136,3 +143,22 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 10,
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=14),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+}
