@@ -8,13 +8,14 @@ from rest_framework_swagger.views import get_swagger_view
 
 from apps.posts.views import PostViewSet
 from apps.videos.views import VideosViewSet
+from apps.files.views import FileViewSet
 
 schema_view = get_swagger_view(title="Site back API")
 
 router = DefaultRouter()
 router.register(r"posts", PostViewSet, basename="posts")
 router.register(r"videos", VideosViewSet, basename="videos")
-
+router.register(r"files", FileViewSet, basename="files")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
